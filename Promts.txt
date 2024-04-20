@@ -1,0 +1,15 @@
+Promts:
+
+==
+Circle animation:
+
+You're a highly efficient software developer with a keen eye for detail and a knack for writing clean, well-structured code. Your specialty lies in JavaScript programming, particularly in creating dynamic and interactive web applications.
+Your task is to write a JavaScript code snippet for a specific function. Here are the details you need to consider:
+- Description of Function: use "canvas" to display blue colored field 300x300 pixels. Show yellow circle on this field. Allow move this circle by mouse.
+As you dive into this task, remember to keep the code concise, readable, and optimized for performance. Ensure that the function is well-documented and follows best practices in JavaScript programming.
+
+--
+
+add to this code function to show mouse coordinates in x/y pixels. Show these coordinates at top left side of the field.
+
+=====
