@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Кубик</title>
+    <style>
+        #graph-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 600px; /* Высота контейнера */
+        }
+        .bar {
+            width: 100px;
+            margin: 5px;
+            background-color: blue;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding: 5px 0;
+        }
+        .bar label {
+            color: yellow;
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+
+<div id="graph-container"></div>
+
+<script>
+function rollTheDice() {
+    return Math.floor(Math.random() * 6) + 1;
+}
+
+function drawGraph(results) {
+    const container = document.getElementById('graph-container');
+    container.innerHTML = ''; // Очистить предыдущие результаты
+
+    Object.entries(results).forEach(([number, count]) => {
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        bar.style.height = `${count * 2}px`; // Высота в зависимости от количества выпадений
+        bar.innerHTML = `<label>${count}</label>`;
+        container.appendChild(bar);
+
+        const numberLabel = document.createElement('div');
+        numberLabel.textContent = number;
+        bar.appendChild(numberLabel);
+    });
+}
+
+function simulateRolls(numRolls) {
+    const results = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0};
+
+    for (let i = 0; i < numRolls; i++) {
+        const roll = rollTheDice();
+        results[roll]++;
+    }
+
+    drawGraph(results);
+}
+
+simulateRolls(1000);
+</script>
+
+</body>
+</html>
