@@ -41,7 +41,9 @@
             ctx2.clearRect(0, 0, coordinates.width, coordinates.height); // Clear canvas to redraw everything
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             // drawImageOnCanvas(); // -- draw image on canvas
-            drawCircle();
+            for (let circle = circles.length - 1; circle >= 0; circle--) {
+                drawCircle(circles[circle]);
+            }
             displayMouseCoords(); // Display mouse coordinates
         }
 
@@ -49,21 +51,35 @@
             ctx.drawImage(img, 2, 2, 300, 300);
         }
 
+        class Circle {
+            constructor(x, y, radius, color) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.color = color;
+                this.isDragging = false;
+            }
+        }
+
+        let circles = [new Circle(150, 150, 25, 'green'), new Circle(25, 25, 25, 'red')];
+
+        circles.push(new Circle(25, 150, 25, 'blue'));
+
         // Circle properties
-        let circle = {
-            x: 150, // Initial X
-            y: 150, // Initial Y
-            radius: 25, // Radius
-            color: 'green',
-            isDragging: false,
-        };
+        // let circle = {
+        //     x: 150, // Initial X
+        //     y: 150, // Initial Y
+        //     radius: 25, // Radius
+        //     color: 'green',
+        //     isDragging: false,
+        // };
 
         let mouseData = {
             x: null,
             y: null
         };
 
-        function drawCircle() {
+        function drawCircle(circle) {
             ctx.beginPath();
             ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
             ctx.fillStyle = circle.color;
@@ -80,7 +96,7 @@
         }
 
         // Check if the mouse is over the circle
-        function isMouseOverCircle(mouseX, mouseY) {
+        function isMouseOverCircle(circle, mouseX, mouseY) {
             let distance = Math.sqrt((mouseX - circle.x) ** 2 + (mouseY - circle.y) ** 2);
             return distance < circle.radius;
         }
@@ -89,9 +105,11 @@
             let rect = canvas.getBoundingClientRect();
             let mouseX = e.clientX - rect.left;
             let mouseY = e.clientY - rect.top;
-
-            if (isMouseOverCircle(mouseX, mouseY)) {
-                circle.isDragging = true;
+            for (const circle in circles) {
+                if (isMouseOverCircle(circles[circle], mouseX, mouseY)) {
+                    circles[circle].isDragging = true;
+                    break;
+                }
             }
         });
 
@@ -99,10 +117,12 @@
             let rect = canvas.getBoundingClientRect();
             let mouseX = e.clientX - rect.left;
             let mouseY = e.clientY - rect.top;
-
-            if (circle.isDragging) {
-                circle.x = mouseX;
-                circle.y = mouseY;
+            for (const circle in circles) {
+                if (circles[circle].isDragging) {
+                    // console.log(circles[circle]);
+                    circles[circle].x = mouseX;
+                    circles[circle].y = mouseY;
+                }
             }
             mouseData.x = mouseX;
             mouseData.y = mouseY;
@@ -112,7 +132,7 @@
         });
 
         canvas.addEventListener('mouseup', function (e) {
-            circle.isDragging = false;
+            circles.forEach((circle) => circle.isDragging = false);
         });
 
         // Initial draw
