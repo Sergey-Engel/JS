@@ -5,8 +5,10 @@
     <title>Canvas size testing</title>
     <style>
         .frame {
-            background-image: url("map-1.webp"); /* W:1397, H:1042 */
-            background-size: cover;
+            background-image: url("map-1.webp");
+            /* W:1397, H:1042 */
+            background-size: contain;
+            background-repeat: no-repeat;
             position: absolute;
             top: 0px;
             left: 0px;
@@ -20,10 +22,19 @@
 
 <body onload="drawFrame();">
     <canvas class="frame" id="canvas" width="1397" height="1042"></canvas>
+
     <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
 
         function drawFrame() {
             ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas to redraw everything
+
+            const scaleX = window.innerWidth / canvas.width;
+            const scaleY = window.innerHeight / canvas.height;
+            const scaleToFit = Math.min(scaleX, scaleY);
+            canvas.style.transformOrigin = "0 0"; //scale from top left
+            canvas.style.transform = `scale(${scaleToFit})`; // Scale canvas size to fit window size
         }
 
     </script>
