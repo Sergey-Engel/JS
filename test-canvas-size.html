@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Canvas size testing</title>
+    <style>
+        .frame {
+            background-image: url("map-1.webp"); /* W:1397, H:1042 */
+            background-size: cover;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+
+        .frame {
+            border: black solid 1px;
+        }
+    </style>
+</head>
+
+<body onload="drawFrame();">
+    <canvas class="frame" id="canvas" width="1397" height="1042"></canvas>
+    <script>
+
+        function drawFrame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas to redraw everything
+        }
+
+    </script>
+</body>
+
+</html>
