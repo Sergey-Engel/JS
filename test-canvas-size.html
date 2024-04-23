@@ -33,6 +33,7 @@
             const scaleX = window.innerWidth / canvas.width;
             const scaleY = window.innerHeight / canvas.height;
             const scaleToFit = Math.min(scaleX, scaleY);
+            console.log(scaleToFit);
             canvas.style.transformOrigin = "0 0"; //scale from top left
             canvas.style.transform = `scale(${scaleToFit})`; // Scale canvas size to fit window size
         }
