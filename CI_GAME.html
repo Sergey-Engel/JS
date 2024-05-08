@@ -38,12 +38,12 @@
             ctx2.clearRect(0, 0, coordinates.width, coordinates.height);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            displayMouseCoords(); // Display mouse coordinates
+            displayMouseCoords(scaleToFit); // Display mouse coordinates
 
             const scaleX = window.innerWidth / canvas.width;
             const scaleY = window.innerHeight / canvas.height;
-            const scaleToFit = Math.min(scaleX, scaleY);
-            // console.log(scaleToFit);
+            scaleToFit = Math.min(scaleX, scaleY);
+            console.log(scaleToFit);
             canvas.style.transformOrigin = "0 0"; //scale from top left
             canvas.style.transform = `scale(${scaleToFit})`; // Scale canvas size to fit window size
             for (let circle = circles.length - 1; circle >= 0; circle--) {
@@ -79,9 +79,9 @@
 
         // Check if the mouse is over the circle
         function isMouseOverCircle(circle, mouseX, mouseY) {
-            let distance = Math.sqrt((mouseX - circle.x) ** 2 + (mouseY - circle.y) ** 2);
-            console.log(circle, mouseX, mouseY, circle.x, circle.y);
-            return distance < circle.radius;
+            let distance = Math.sqrt((mouseX - circle.x*scaleToFit) ** 2 + (mouseY - circle.y*scaleToFit) ** 2);
+            //console.log(circle, mouseX, mouseY, circle.x, circle.y);
+            return distance < circle.radius*scaleToFit;
         }
 
         canvas.addEventListener('mousedown', function (e) {
@@ -102,8 +102,8 @@
             let mouseY = e.clientY - rect.top;
             for (const circle in circles) {
                 if (circles[circle].isDragging) {
-                    circles[circle].x = mouseX;
-                    circles[circle].y = mouseY;
+                    circles[circle].x = mouseX/scaleToFit;
+                    circles[circle].y = mouseY/scaleToFit;
                 }
             }
             mouseData.x = mouseX;
@@ -115,6 +115,7 @@
             circles.forEach((circle) => circle.isDragging = false);
         });
 
+        // Set the initial circles
         const circleRadius = 15;
         let circles = [new Circle(50, 240, circleRadius, 'green'), new Circle(50, 340, circleRadius, 'red'), new Circle(50, 440, circleRadius, 'blue')];
 
@@ -122,6 +123,8 @@
             x: null,
             y: null
         };
+
+        let scaleToFit = 1.0;
 
         reDrawFrame();
 
