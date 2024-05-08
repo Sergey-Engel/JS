@@ -10,30 +10,120 @@
             background-size: contain;
             background-repeat: no-repeat;
             position: absolute;
-            top: 0px;
+            top: 52px;
             left: 0px;
+            border: black solid 1px;
+        }
+
+        .debug {
+            background-color: #FF0000;
             border: black solid 1px;
         }
     </style>
 </head>
 
-<body onload="drawFrame();">
-    <canvas class="frame" id="canvas" width="1251" height="891"></canvas> 
+<body onload="reDrawFrame();">
+    <canvas class="frame" id="canvas" width="1251" height="891"></canvas>
+    <canvas class="debug" id="coordinates" width="120" height="40" top="0" left="0"></canvas>
 
     <script>
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
 
-        function drawFrame() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas to redraw everything
+        const coordinates = document.getElementById('coordinates');
+        const ctx2 = coordinates.getContext('2d');
+
+        function reDrawFrame() {
+            // Clear canvas to redraw everything
+            ctx2.clearRect(0, 0, coordinates.width, coordinates.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            displayMouseCoords(); // Display mouse coordinates
 
             const scaleX = window.innerWidth / canvas.width;
             const scaleY = window.innerHeight / canvas.height;
             const scaleToFit = Math.min(scaleX, scaleY);
-            console.log(scaleToFit);
+            // console.log(scaleToFit);
             canvas.style.transformOrigin = "0 0"; //scale from top left
             canvas.style.transform = `scale(${scaleToFit})`; // Scale canvas size to fit window size
+            for (let circle = circles.length - 1; circle >= 0; circle--) {
+                drawCircle(circles[circle]);
+            }
         }
+
+        class Circle {
+            constructor(x, y, radius, color) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.color = color;
+                this.isDragging = false;
+            }
+        }
+
+        // Function to display mouse coordinates
+        function displayMouseCoords() {
+            if (mouseData.x === null || mouseData.y === null) return;
+            ctx2.font = '16px Sans-serif';
+            ctx2.fillStyle = 'white';
+            ctx2.fillText(`X: ${mouseData.x}, Y: ${mouseData.y}`, 10, 20); // Display at top left, with a little margin
+        }
+
+        function drawCircle(circle) {
+            ctx.beginPath();
+            ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+            ctx.fillStyle = circle.color;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // Check if the mouse is over the circle
+        function isMouseOverCircle(circle, mouseX, mouseY) {
+            let distance = Math.sqrt((mouseX - circle.x) ** 2 + (mouseY - circle.y) ** 2);
+            console.log(circle, mouseX, mouseY, circle.x, circle.y);
+            return distance < circle.radius;
+        }
+
+        canvas.addEventListener('mousedown', function (e) {
+            let rect = canvas.getBoundingClientRect();
+            let mouseX = e.clientX - rect.left;
+            let mouseY = e.clientY - rect.top;
+            for (const circle in circles) {
+                if (isMouseOverCircle(circles[circle], mouseX, mouseY)) {
+                    circles[circle].isDragging = true;
+                    break;
+                }
+            }
+        });
+
+        canvas.addEventListener('mousemove', function (e) {
+            let rect = canvas.getBoundingClientRect();
+            let mouseX = e.clientX - rect.left;
+            let mouseY = e.clientY - rect.top;
+            for (const circle in circles) {
+                if (circles[circle].isDragging) {
+                    circles[circle].x = mouseX;
+                    circles[circle].y = mouseY;
+                }
+            }
+            mouseData.x = mouseX;
+            mouseData.y = mouseY;
+            reDrawFrame();
+        });
+
+        canvas.addEventListener('mouseup', function (e) {
+            circles.forEach((circle) => circle.isDragging = false);
+        });
+
+        const circleRadius = 15;
+        let circles = [new Circle(50, 240, circleRadius, 'green'), new Circle(50, 340, circleRadius, 'red'), new Circle(50, 440, circleRadius, 'blue')];
+
+        let mouseData = {
+            x: null,
+            y: null
+        };
+
+        reDrawFrame();
 
     </script>
 </body>
