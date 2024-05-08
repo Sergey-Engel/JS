@@ -12,7 +12,7 @@
             position: absolute;
             top: 0px;
             left: 0px;
-            border: black solid 1px;
+            border: gray solid 1px;
         }
 
         .debug {
@@ -42,7 +42,7 @@
 
             const scaleX = window.innerWidth / canvas.width;
             const scaleY = window.innerHeight / canvas.height;
-            scaleToFit = Math.min(scaleX, scaleY);
+            scaleToFit = Math.min(scaleX, scaleY)*0.995;
             console.log(scaleToFit);
             canvas.style.transformOrigin = "0 0"; //scale from top left
             canvas.style.transform = `scale(${scaleToFit})`; // Scale canvas size to fit window size
@@ -118,7 +118,7 @@
         });
 
         // Set the initial circles
-        const circleRadius = 15;
+        const circleRadius = 18;
         let circles = [new Circle(50, 240, circleRadius, 'green'), new Circle(50, 340, circleRadius, 'red'), new Circle(50, 440, circleRadius, 'blue')];
 
         let mouseData = {
