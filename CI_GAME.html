@@ -24,7 +24,7 @@
 
 <body onload="reDrawFrame();">
     <canvas class="frame" id="canvas" width="1251" height="891"></canvas>
-    <canvas class="debug" id="coordinates" width="120" height="40" top="0" left="0"></canvas>
+    <canvas class="debug" id="coordinates" width="120" height="60" top="0" left="0"></canvas>
 
     <script>
         const canvas = document.getElementById("canvas");
@@ -38,7 +38,7 @@
             ctx2.clearRect(0, 0, coordinates.width, coordinates.height);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            displayMouseCoords(scaleToFit); // Display mouse coordinates
+            displayMouseCoords(); // Display mouse coordinates
 
             const scaleX = window.innerWidth / canvas.width;
             const scaleY = window.innerHeight / canvas.height;
@@ -66,7 +66,9 @@
             if (mouseData.x === null || mouseData.y === null) return;
             ctx2.font = '16px Sans-serif';
             ctx2.fillStyle = 'white';
-            ctx2.fillText(`X: ${mouseData.x}, Y: ${mouseData.y}`, 10, 20); // Display at top left, with a little margin
+            ctx2.fillText(`X: ${Math.round(mouseData.x*scaleToFit)}, Y: ${Math.round(mouseData.y*scaleToFit)}`, 10, 20); // Display at top left, with a little margin
+            ctx2.fillStyle = 'black';
+            ctx2.fillText(`X: ${mouseData.x}, Y: ${mouseData.y}`, 10, 40); // Display at top left, with a little margin
         }
 
         function drawCircle(circle) {
