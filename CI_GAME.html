@@ -10,7 +10,7 @@
             background-size: contain;
             background-repeat: no-repeat;
             position: absolute;
-            top: 52px;
+            top: 0px;
             left: 0px;
             border: black solid 1px;
         }
@@ -24,21 +24,21 @@
 
 <body onload="reDrawFrame();">
     <canvas class="frame" id="canvas" width="1251" height="891"></canvas>
-    <canvas class="debug" id="coordinates" width="120" height="60" top="0" left="0"></canvas>
+    <!-- <canvas class="debug" id="coordinates" width="120" height="60" top="0" left="0"></canvas> -->
 
     <script>
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
 
-        const coordinates = document.getElementById('coordinates');
-        const ctx2 = coordinates.getContext('2d');
+        //const coordinates = document.getElementById('coordinates');
+        //const ctx2 = coordinates.getContext('2d');
 
         function reDrawFrame() {
             // Clear canvas to redraw everything
-            ctx2.clearRect(0, 0, coordinates.width, coordinates.height);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            displayMouseCoords(); // Display mouse coordinates
+            //ctx2.clearRect(0, 0, coordinates.width, coordinates.height);
+            //displayMouseCoords(); // Display mouse coordinates
 
             const scaleX = window.innerWidth / canvas.width;
             const scaleY = window.innerHeight / canvas.height;
