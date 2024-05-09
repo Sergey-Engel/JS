@@ -10,7 +10,7 @@
             background-size: contain;
             background-repeat: no-repeat;
             position: absolute;
-            top: 0px;
+            top: 40px;
             left: 0px;
             border: gray solid 1px;
         }
@@ -23,7 +23,8 @@
 </head>
 
 <body onload="reDrawFrame();">
-    <canvas class="frame" id="canvas" width="1251" height="891"></canvas>
+    <button onclick="showDice()">Бросить кости</button>
+    <canvas class="frame" id="canvas" width="1251" height="891"> </canvas>
     <!-- <canvas class="debug" id="coordinates" width="120" height="60" top="0" left="0"></canvas> -->
 
     <script>
@@ -40,12 +41,13 @@
             //ctx2.clearRect(0, 0, coordinates.width, coordinates.height);
             //displayMouseCoords(); // Display mouse coordinates
 
-            const scaleX = (window.innerWidth-1) / canvas.width;
-            const scaleY = (window.innerHeight-1) / canvas.height;
+            const scaleX = (window.innerWidth - 1) / canvas.width;
+            const scaleY = (window.innerHeight - 1) / canvas.height;
             scaleToFit = Math.min(scaleX, scaleY);
             console.log(scaleToFit);
             canvas.style.transformOrigin = "0 0"; //scale from top left
             canvas.style.transform = `scale(${scaleToFit})`; // Scale canvas size to fit window size
+            drawTheDice(diceResult);
             for (let circle = circles.length - 1; circle >= 0; circle--) {
                 drawCircle(circles[circle]);
             }
@@ -66,7 +68,7 @@
             if (mouseData.x === null || mouseData.y === null) return;
             ctx2.font = '16px Sans-serif';
             ctx2.fillStyle = 'white';
-            ctx2.fillText(`X: ${Math.round(mouseData.x*scaleToFit)}, Y: ${Math.round(mouseData.y*scaleToFit)}`, 10, 20); // Display at top left, with a little margin
+            ctx2.fillText(`X: ${Math.round(mouseData.x * scaleToFit)}, Y: ${Math.round(mouseData.y * scaleToFit)}`, 10, 20); // Display at top left, with a little margin
             ctx2.fillStyle = 'black';
             ctx2.fillText(`X: ${mouseData.x}, Y: ${mouseData.y}`, 10, 40); // Display at top left, with a little margin
         }
@@ -81,9 +83,9 @@
 
         // Check if the mouse is over the circle
         function isMouseOverCircle(circle, mouseX, mouseY) {
-            let distance = Math.sqrt((mouseX - circle.x*scaleToFit) ** 2 + (mouseY - circle.y*scaleToFit) ** 2);
+            let distance = Math.sqrt((mouseX - circle.x * scaleToFit) ** 2 + (mouseY - circle.y * scaleToFit) ** 2);
             //console.log(circle, mouseX, mouseY, circle.x, circle.y);
-            return distance < circle.radius*scaleToFit;
+            return distance < circle.radius * scaleToFit;
         }
 
         canvas.addEventListener('mousedown', function (e) {
@@ -104,8 +106,8 @@
             let mouseY = e.clientY - rect.top;
             for (const circle in circles) {
                 if (circles[circle].isDragging) {
-                    circles[circle].x = mouseX/scaleToFit;
-                    circles[circle].y = mouseY/scaleToFit;
+                    circles[circle].x = mouseX / scaleToFit;
+                    circles[circle].y = mouseY / scaleToFit;
                 }
             }
             mouseData.x = mouseX;
@@ -117,6 +119,46 @@
             circles.forEach((circle) => circle.isDragging = false);
         });
 
+        // Button sound
+        const audio = new Audio("https://www.fesliyanstudios.com/play-mp3/387");
+        const buttons = document.querySelectorAll("button");
+
+        buttons.forEach(button => {
+            button.addEventListener("click", () => {
+                audio.play();
+            });
+        });
+
+        // Dice functions
+        function rollTheDice() {
+            return Math.floor(Math.random() * 6) + 1;
+        }
+
+        function drawTheDice(result) {
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+            ctx.shadowBlur = 0;
+
+            ctx.fillStyle = "rgb(200,0,0)";
+            ctx.clearRect(10, 10, 55, 50);
+            ctx.fillRect(10, 10, 55, 50);
+
+            ctx.shadowOffsetX = 2;
+            ctx.shadowOffsetY = 2;
+            ctx.shadowBlur = 2;
+            ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+
+            ctx.font = "24px Sans-serif";
+            ctx.fillStyle = "lightblue";
+            ctx.fillText(result, 30, 42)
+        }
+
+        function showDice() {
+            let diceResult = rollTheDice(6);
+            //alert(result);
+            drawTheDice(diceResult);
+        };
+
         // Set the initial circles
         const circleRadius = 18;
         let circles = [new Circle(50, 240, circleRadius, 'green'), new Circle(50, 340, circleRadius, 'red'), new Circle(50, 440, circleRadius, 'blue')];
@@ -127,7 +169,6 @@
         };
 
         let scaleToFit = 1.0;
-
         reDrawFrame();
 
     </script>
