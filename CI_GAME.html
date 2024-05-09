@@ -23,7 +23,7 @@
 </head>
 
 <body onload="reDrawFrame();">
-    <button onclick="showDice()">Бросить кости</button>
+    <button onclick="refreshDice()">Бросить кости</button>
     <canvas class="frame" id="canvas" width="1251" height="891"> </canvas>
     <!-- <canvas class="debug" id="coordinates" width="120" height="60" top="0" left="0"></canvas> -->
 
@@ -153,8 +153,8 @@
             ctx.fillText(result, 30, 42)
         }
 
-        function showDice() {
-            let diceResult = rollTheDice(6);
+        function refreshDice() {
+            diceResult = rollTheDice(6);
             //alert(result);
             drawTheDice(diceResult);
         };
@@ -169,6 +169,7 @@
         };
 
         let scaleToFit = 1.0;
+        let diceResult = 6;
         reDrawFrame();
 
     </script>
